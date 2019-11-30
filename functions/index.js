@@ -7,51 +7,79 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-//  Initialize firebase
+//  Initialize firebase app
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 // app.use('/api/v1', app);
 
 app.listen(port, function () {
     console.log('Listening to port ' + port);
 })
 
-app.get('/ping', (req, res) => {
-    const infos = []
-    firebaseHelper.firestore
-    .backup(db, 'intellisensor')
-    .then(data => {    
-        infos = data;
-        let docs = data['intellisensor'];
-        for (const key in docs) {
-            if (docs.hasOwnProperty(key)) {            
-                console.log('Doc id: ', key);
-                console.log('Document data: ', docs[key])                    
-            }
-        }
-    })
-    console.log(infos)
-    res.send('Info sent!');
-})
+// app.get('/ping', async (req, res) => {
+//     // console.log(infos)
+//     // res.send(infos);
+//     // res.send('Info sent!');
+//     const posts = [];
+//     try {
+//         const postRef = await db.collection('intellisensor').get()
+//         console.log(`Received query snapshot of size ${postRef.size}`);
+//         postRef.forEach((doc) => {
+//         const post = doc.data();
+//         post.id = doc.id;
+//         posts.push(post)
+//         })
+//         res.json(posts);
+//         return;
+//     } catch (err) {
+//         next(err)
+//     }
+// })
 
-app.patch('/sensor/:sensorId', async(req, res) => {
-    try{
-        await firebaseHelper.firestore.updateDocument(db, sensorsCollection, req.params.sensorId, req.body);
-        console.log('Here')
-        res.status(200).send('Update Success');
-    }catch(error){
-        res.status(204).send('Patch Error');
+/* GET ALL POST */
+router.get('/dataset/:datasetId', async (req, res, next) => {
+    const posts = [];
+    try {
+    //   const id = req.params.datasetId;
+      const postRef = await db.collection('intellisensor').doc(req.params.datasetId).collection('dataset').get();
+      console.log(`Received query snapshot of size ${postRef.size}`);
+      if (!postRef.exists) {
+        console.log('No such document!');
+        return;
+      }
+      postRef.forEach((doc) => {
+        const post = doc.data();
+        post.id = doc.id;
+        posts.push(post)
+      })
+      res.json(posts);
+    } catch(err) {
+      next(err)
+    }                     
+  });
+
+/* SAVE A POST */
+app.post('/sensor/:sensorId', async (req, res, next) => {
+    let FieldValue = require('firebase-admin').firestore.FieldValue;
+    try {
+        await db.collection('intellisensor').doc(req.params.sensorId).collection('dataset').add({
+            air: req.body.air,
+            temperature: req.body.temperature,
+            humidity: req.body.humidity,
+            created_at: FieldValue.serverTimestamp()
+        });
+        console.log('Added document to DB')
+        res.send({
+            message: 'Added document to DB'
+        })
+    } catch(err) {
+        next(err)
     }
-})
+  })
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
 exports.app = functions.https.onRequest(app);
