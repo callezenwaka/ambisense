@@ -46,20 +46,20 @@ app.get('/dataset/:datasetId', async (req, res, next) => {
     const posts = [];
     try {
     //   const id = req.params.datasetId;
-      const postRef = await db.collection('intellisensor').doc(req.params.datasetId).collection('dataset').get();
-      console.log(`Received query snapshot of size ${postRef.size}`);
-      if (!postRef.exists) {
-        console.log('No such document!');
-        return;
-      }
-      postRef.forEach((doc) => {
-        const post = doc.data();
-        post.id = doc.id;
-        posts.push(post)
-      })
-      res.json(posts);
+        const postRef = await db.collection('intellisensor').doc(req.params.datasetId).collection('dataset').get();
+        console.log(`Received query snapshot of size ${postRef.size}`);
+        if (!postRef.exists) {
+            console.log('No such document!');
+            return;
+        }
+        postRef.forEach((doc) => {
+            const post = doc.data();
+            post.id = doc.id;
+            posts.push(post)
+        })
+        res.json(posts);
     } catch(err) {
-      next(err)
+        next(err)
     }                     
   });
 
