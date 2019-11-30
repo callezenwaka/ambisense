@@ -42,7 +42,7 @@ app.listen(port, function () {
 // })
 
 /* GET ALL POST */
-router.get('/dataset/:datasetId', async (req, res, next) => {
+app.get('/dataset/:datasetId', async (req, res, next) => {
     const posts = [];
     try {
     //   const id = req.params.datasetId;
