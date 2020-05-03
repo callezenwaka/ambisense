@@ -11,10 +11,10 @@
         <meta name="msapplication-tap-highlight" content="no">
 
         <!-- Web Application Manifest -->
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="/ambisense/manifest.json">
         
         <!-- Favicont -->
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/ambisense/favicon.ico" type="image/x-icon">
 
         <!-- Add to homescreen for Chrome on Android -->
         <meta name="mobile-web-app-capable" content="yes">
@@ -40,7 +40,7 @@
                 text-align: center;
                 font-family: fantasy;
             }
-            .home {
+            .home, form {
                 width: 60%;
                 margin: 3rem auto;
                 text-align: center;
@@ -49,9 +49,19 @@
         </style>
     </head>
     <body>
-        <h1>{{heading}}</h1>
-        <div class="home">
-            {{!-- <a href="/ambisense/dashboard" rel="noopener noreferrer">Dashboard</a> --}}
+        <div>
+            <h1>{{heading}}</h1>
+            <div class="home">
+                <a href="/ambisense/" rel="noopener noreferrer">Home</a>
+            </div>
+            <form action="/ambisense/sensor/12345678" method="post">
+                <label for="temp">Temperature:</label><br>
+                <input type="text" name="temperature" id="temperature"><br>
+                <label for="hum">Humidity:</label><br>
+                <input type="text" name="humidity" id="humidity">
+                <br><br>
+                <button type="submit">Submit</button>
+            </form>
         </div>
         <!-- Import and configure the Firebase SDK -->
         <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
@@ -61,14 +71,13 @@
         <script src="/__/firebase/7.14.2/firebase-storage.js"></script>
         <script src="/__/firebase/7.14.2/firebase-messaging.js"></script>
         <script src="/__/firebase/7.14.2/firebase-firestore.js"></script>
-        <script defer src="/__/firebase/init.js"></script> --}}
+        <script src="/__/firebase/init.js"></script> --}}
         <script defer src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
         <script defer src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
         <script defer src="https://www.gstatic.com/firebasejs/7.14.2/firebase-storage.js"></script>
         <script defer src="https://www.gstatic.com/firebasejs/7.14.2/firebase-messaging.js"></script>
         <script defer src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script>
-        <script defer src="https://www.gstatic.com/firebasejs/init.js"></script>
 
-        <script defer src="/main.js"></script>
+        {{!-- <script src="/ambisense/main.js"></script> --}}
     </body>
 </html>
