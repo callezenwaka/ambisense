@@ -132,7 +132,7 @@ exports.sendNotifications = functions.firestore.document('ambisense/{ambisenseId
         const allTokens = await admin.firestore().collection('fcmTokens').get();
         const tokens = [];
         allTokens.forEach((tokenDoc) => {
-            tokens.push(tokenDoc.token);
+            tokens.push(tokenDoc.data().token);
         });
     
         if (tokens.length > 0) {

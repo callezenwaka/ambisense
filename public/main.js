@@ -36,6 +36,9 @@ firebase.messaging().onTokenRefresh(() => {
 //   `messaging.setBackgroundMessageHandler` handler.
 firebase.messaging().onMessage((payload) => {
     console.log('Message received. ', payload);
+    if (payload) {
+        
+    }
     // [START_EXCLUDE]
     // Update the UI to include the received message.
     // appendMessage(payload);
